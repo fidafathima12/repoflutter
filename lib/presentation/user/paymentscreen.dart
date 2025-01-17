@@ -150,11 +150,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     addPaymentApi({
                       "paymentmethod": selectedPaymentMethod,
                       "amount": 1000,
-                       "artistid": widget.artisid,
+                      
                        "userid":loginId,
                       "service": widget.service,
                       "booking_date": formattedDate,
                       "location":widget.location,
+                      "artistid":widget.artisid,
                     }, context);
 
                     // Navigate to confirmation or bookings page

@@ -13,15 +13,15 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController =
-      TextEditingController(text: "hanna");
+      TextEditingController();
   final TextEditingController _phoneController =
-      TextEditingController(text: "9497882589");
+      TextEditingController();
   final TextEditingController _emailController =
-      TextEditingController(text: "fathima@gmail.com");
+      TextEditingController();
   final TextEditingController _passwordController =
-      TextEditingController(text: "hanna123");
+      TextEditingController();
   final TextEditingController _confirmPasswordController =
-      TextEditingController(text: "hanna123");
+      TextEditingController();
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -108,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(appBar: AppBar(),
       body: Stack(
         fit: StackFit.expand,
         children: [

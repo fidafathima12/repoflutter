@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             buildButton(
-              'payments',
+              'Payments',
               const Color.fromARGB(255, 62, 135, 212),
               const Color.fromARGB(195, 23, 127, 212),
               Icons.manage_accounts,
@@ -88,7 +88,7 @@ class HomePage extends StatelessWidget {
                 List<Map<String,dynamic>>paymentdata=await viewPaymnetApi(); 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PaymentDetailsScreen()),
+                  MaterialPageRoute(builder: (context) => PaymentDetailsScreen(paymentstatus:paymentdata)),
                 );
               },
             ),

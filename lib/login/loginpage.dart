@@ -13,8 +13,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController(text: 'fathimaa@gmail.com');
-  final TextEditingController _passwordController = TextEditingController(text: '6544');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isObscured = true;
 
   // Animation controller
@@ -46,10 +46,8 @@ class _LoginPageState extends State<LoginPage>
       vsync: this,
     );
 
-    _animation = Tween<Offset>(
-      begin: const Offset(0, -1), // Start from offscreen (top)
-      end: Offset.zero, // Slide to the center
-    ).animate(CurvedAnimation(
+    _animation = Tween<Offset>(begin: const Offset(0, -1), end: Offset.zero)
+        .animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     ));
@@ -123,12 +121,6 @@ class _LoginPageState extends State<LoginPage>
                         ),
                       ),
                       const SizedBox(height: 50),
-                      // const Text(
-                      //   "Please login to your account",
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //       fontSize: 16, color: Color.fromARGB(255, 43, 42, 42)),
-                      // ),
                       const SizedBox(height: 20),
                       Form(
                         key: _formKey,
@@ -158,7 +150,7 @@ class _LoginPageState extends State<LoginPage>
                                           .white), // White border when focused
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                prefixIcon: Icon(
+                                suffixIcon: Icon(
                                   Icons.email,
                                   color: Colors.white, // White icon color
                                 ),
@@ -179,6 +171,7 @@ class _LoginPageState extends State<LoginPage>
                               style: TextStyle(
                                   color: Colors.white), // White text color
                               controller: _passwordController,
+                              obscureText: _isObscured, // This controls whether the password is visible or hidden
                               decoration: InputDecoration(
                                 labelStyle: TextStyle(
                                     color:
@@ -199,9 +192,14 @@ class _LoginPageState extends State<LoginPage>
                                           .white), // White border when focused
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                prefixIcon: Icon(
-                                  Icons.lock,
-                                  color: Colors.white, // White icon color
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _isObscured
+                                        ? Icons.remove_red_eye
+                                        : Icons.visibility_off,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: _togglePasswordVisibility, // Toggling visibility when clicked
                                 ),
                               ),
                               validator: (value) {
@@ -346,7 +344,6 @@ class _LoginPageState extends State<LoginPage>
                       ElevatedButton(
                         onPressed: () {
                           // Submit the selected account type
-                          // ignore: avoid_print
                           print('Account type: $_selectedAccountType');
                           if (_selectedAccountType == "Personal") {
                             Navigator.push(

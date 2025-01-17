@@ -34,7 +34,10 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
+      appBar: AppBar(
+        title: Text('Register'),
+        backgroundColor: Colors.blue,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -48,14 +51,19 @@ class _RegisterState extends State<Register> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 16),
-        
+
                 // Username
                 TextFormField(
                   controller: _usernameController,
                   decoration: InputDecoration(
                     labelText: 'Username',
                     hintText: 'Enter your name',
-                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -65,14 +73,19 @@ class _RegisterState extends State<Register> {
                   },
                 ),
                 SizedBox(height: 16),
-        
+
                 // Password
                 TextFormField(
                   controller: _passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Enter your password',
-                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
                   ),
                   obscureText: true,
                   validator: (value) {
@@ -83,14 +96,19 @@ class _RegisterState extends State<Register> {
                   },
                 ),
                 SizedBox(height: 16),
-        
+
                 // Address
                 TextFormField(
                   controller: _addressController,
                   decoration: InputDecoration(
                     labelText: 'Address',
                     hintText: 'Enter your address',
-                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -100,14 +118,19 @@ class _RegisterState extends State<Register> {
                   },
                 ),
                 SizedBox(height: 16),
-        
+
                 // Age
                 TextFormField(
                   controller: _ageController,
                   decoration: InputDecoration(
                     labelText: 'Age',
                     hintText: 'Enter your age',
-                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
                   ),
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -118,7 +141,7 @@ class _RegisterState extends State<Register> {
                   },
                 ),
                 SizedBox(height: 16),
-        
+
                 // Gender (Radio buttons)
                 RadioListTile<int>(
                   title: Text('Female'),
@@ -133,23 +156,25 @@ class _RegisterState extends State<Register> {
                   onChanged: (val) => _handleRadioValueChange(val!),
                 ),
                 SizedBox(height: 16),
-        
-             
-        
+
                 // Email
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
                     hintText: 'Enter your email',
-                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    // Check if the email is valid
                     if (!RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$")
                         .hasMatch(value)) {
                       return 'Please enter a valid email address';
@@ -158,14 +183,19 @@ class _RegisterState extends State<Register> {
                   },
                 ),
                 SizedBox(height: 16),
-        
+
                 // Place
                 TextFormField(
                   controller: _placeController,
                   decoration: InputDecoration(
                     labelText: 'Place',
                     hintText: 'Enter your place',
-                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -175,14 +205,19 @@ class _RegisterState extends State<Register> {
                   },
                 ),
                 SizedBox(height: 16),
-        
+
                 // Phone
                 TextFormField(
                   controller: _phoneController,
                   decoration: InputDecoration(
                     labelText: 'Phone',
                     hintText: 'Enter your phone number',
-                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
                   ),
                   keyboardType: TextInputType.phone,
                   validator: (value) {
@@ -196,7 +231,7 @@ class _RegisterState extends State<Register> {
                   },
                 ),
                 SizedBox(height: 16),
-        
+
                 // Role Selection (User or Artist)
                 DropdownButtonFormField<String>(
                   value: _selectedRole,
@@ -208,7 +243,12 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     labelText: 'Role',
                     hintText: 'Select your role',
-                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
                   ),
                   items: [
                     DropdownMenuItem(
@@ -228,9 +268,7 @@ class _RegisterState extends State<Register> {
                   },
                 ),
                 SizedBox(height: 16),
-        
-             
-        
+
                 // Register Button
                 ElevatedButton(
                   onPressed: () {
@@ -243,6 +281,13 @@ class _RegisterState extends State<Register> {
                       // Add your registration logic here (e.g., send data to an API)
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, backgroundColor: Colors.blue, // White text color
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                   child: Text('Register'),
                 ),
               ],

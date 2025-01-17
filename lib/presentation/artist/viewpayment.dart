@@ -126,13 +126,15 @@
 //     );
 //   }
 // }
-
-import 'package:bridal_hub/services/artist/viewpayment.dart';
 import 'package:bridal_hub/services/loginApi.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';  // You can use Dio to make HTTP requests.
 
 class PaymentDetailsScreen extends StatefulWidget {
+  final List<Map<String, dynamic>> paymentstatus;
+
+  const PaymentDetailsScreen({super.key, required this.paymentstatus});
+
   @override
   _PaymentDetailsScreenState createState() => _PaymentDetailsScreenState();
 }
@@ -155,9 +157,11 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
     try {
       final Dio _dio = Dio();
       // Replace with your actual API endpoint
-     Response response = await _dio.get('$baseUrl/ArtistPaymentStatus/$loginId');
+      Response response = await _dio.get('$baseUrl/ArtistPaymentStatus/$loginId');
+      print("API Response: ${response.data}");  // Log the full API response for inspection
 
       if (response.statusCode == 200) {
+        // Parse the response and update the payments list
         setState(() {
           payments = List<Map<String, dynamic>>.from(response.data);
           isLoading = false;
@@ -203,12 +207,22 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
               const Center(child: CircularProgressIndicator()),
 
             // Show payments list if data is fetched
-            if (!isLoading && payments.isNotEmpty) 
+            if (!isLoading && payments.isNotEmpty)
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: payments.length,
                 itemBuilder: (context, index) {
                   final payment = payments[index];
+
+                  // Safely access fields in the response
+                  String userName = payment['user_name'] ?? 'N/A';
+                  String service = payment['service'] ?? 'N/A';
+                   String status = payment['status'] ?? 'N/A';
+                  String date = payment['date'] ?? 'N/A';
+                  String bookingDate = payment['booking_date'] ?? 'N/A';
+                  String paymentMethod = payment['paymentmethod'] ?? 'N/A';
+                  double amount = payment['amount'] != null ? payment['amount'] : 0.0;
+
                   return Card(
                     elevation: 5,
                     margin: const EdgeInsets.only(bottom: 16.0),
@@ -220,14 +234,15 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildInfoRow("Artist Name", payment['user_name'] ?? 'N/A'),
-                          _buildInfoRow("Service", payment['service']),
-                          _buildInfoRow("Date", payment['date']),
-                          _buildInfoRow("Time", payment['booking_date']),
-                          _buildInfoRow("Payment Method", payment['paymentmethod']),
+                          _buildInfoRow("User Name", userName),
+                          _buildInfoRow("Service", service),
+                          _buildInfoRow("Date", date),
+                          _buildInfoRow("Time", bookingDate),
+                          _buildInfoRow("Status", status),
+                          _buildInfoRow("Payment Method", paymentMethod),
                           const SizedBox(height: 10),
                           Text(
-                            "Total Cost: ₹${payment['amount'].toStringAsFixed(2)}",
+                            "Total Cost: ₹${amount.toStringAsFixed(2)}",
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -243,7 +258,7 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
             // Show message if no payments found
             if (!isLoading && payments.isEmpty)
               const Center(child: Text('No payments found.')),
-            
+
             const SizedBox(height: 30),
 
             // Navigation Button

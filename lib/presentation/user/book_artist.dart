@@ -352,7 +352,7 @@ class _BookArtistScreenState extends State<BookArtistScreen> {
                       MaterialPageRoute(
                         builder: (context) => PaymentScreen(
                           artisname: widget.name,
-                          userid: '', 
+                          userid: widget.artistid, 
                           selectedDate: selectedDate!, 
                           selectedTime: selectedTime?.format(context) ?? '', 
                           service: selectedService!, 

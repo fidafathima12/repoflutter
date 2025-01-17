@@ -81,7 +81,7 @@ class AdminViewBookingsScreen extends StatelessWidget {
                           Text("Date: ${booking["date"]}"),
                           Text("Location: ${booking["location"]}"),
                           Text("Paymentmethod:  ${booking["paymentmethod"]}"),
-                          Text("id,${booking["id"]}"),
+                          Text("Username:  ${booking["user_name"]}"),
                           const SizedBox(height: 20.0),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

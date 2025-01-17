@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
        data,context) async {
     try {
       // Sending POST request
-      Response response = await _dio.post('$baseUrl/bookingpayment/', data: data);
+      Response response = await _dio.post('$baseUrl/bookingpayment/$loginId', data: data);
 
       // Checking if the request was successful
       if (response.statusCode == 200) {
