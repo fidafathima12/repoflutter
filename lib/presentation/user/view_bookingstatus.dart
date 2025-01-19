@@ -1,3 +1,4 @@
+import 'package:bridal_hub/presentation/user/add_review.dart';
 import 'package:bridal_hub/services/loginApi.dart';
 import 'package:bridal_hub/services/artist/viewreview.dart';
 import 'package:bridal_hub/services/user/viewbookingstatus.dart';
@@ -51,7 +52,8 @@ class _BookingStatusScreenState extends State<BookingStatusScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: isLoading
-            ? Center(child: CircularProgressIndicator())  // Show loading indicator
+            ? Center(
+                child: CircularProgressIndicator()) // Show loading indicator
             : hasError
                 ? Center(child: Text("Error loading bookings."))
                 : bookings.isEmpty
@@ -60,6 +62,7 @@ class _BookingStatusScreenState extends State<BookingStatusScreen> {
                         itemCount: bookings.length,
                         itemBuilder: (context, index) {
                           final booking = bookings[index];
+                          print("@@@@@@@@@@@@@$booking");
                           return BookingStatusCard(
                             artistName: booking['artist_name'] ?? 'Artist Name',
                             service: booking['service'] ?? 'Service Name',
@@ -68,6 +71,7 @@ class _BookingStatusScreenState extends State<BookingStatusScreen> {
                             paymentMethod: booking['paymentmethod'] ?? 'no',
                             location: booking['location'] ?? 'Location',
                             amount: booking['amount'] ?? 0.0,
+                            artistid: booking['artist_id'].toString()
                           );
                         },
                       ),
@@ -84,6 +88,7 @@ class BookingStatusCard extends StatelessWidget {
   final String paymentMethod;
   final String location;
   final double amount;
+  final String artistid;
 
   const BookingStatusCard({
     required this.artistName,
@@ -93,6 +98,7 @@ class BookingStatusCard extends StatelessWidget {
     required this.paymentMethod,
     required this.location,
     required this.amount,
+    required this.artistid,
   });
 
   @override
@@ -141,9 +147,7 @@ class BookingStatusCard extends StatelessWidget {
                   "Status: $status",
                   style: TextStyle(
                     fontSize: 16,
-                    color: status == "confirmed"
-                        ? Colors.green
-                        : Colors.orange,
+                    color: status == "confirmed" ? Colors.green : Colors.orange,
                   ),
                 ),
               ],
@@ -183,8 +187,36 @@ class BookingStatusCard extends StatelessWidget {
                   style: TextStyle(fontSize: 16),
                 ),
               ],
-            ),SizedBox(height: 10,),
-            ElevatedButton(onPressed: (){}, child: Text("REVIEW")),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+         ElevatedButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddReviewScreen(id: artistid),
+      ),
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    foregroundColor: Colors.white, backgroundColor: Colors.blueAccent, // Text color
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30), // Button border radius
+    ),
+    elevation: 10, // Button shadow
+    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+  ),
+  child: Text(
+    'Add Review',
+    style: TextStyle(
+      fontSize: 18, // Text size
+      fontWeight: FontWeight.bold, // Text style
+    ),
+  ),
+)
+
           ],
         ),
       ),

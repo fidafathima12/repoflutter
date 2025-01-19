@@ -1,11 +1,13 @@
 import 'package:bridal_hub/presentation/artist/Homescreen.dart';
 import 'package:bridal_hub/presentation/user/homepage.dart';
+import 'package:bridal_hub/services/artist/manageprofike.dart';
+import 'package:bridal_hub/services/user/manageprofile.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 
   final Dio _dio = Dio();
-   String baseUrl = 'http://192.168.1.161:5000';
+   String baseUrl = "http://192.168.1.161:5000";
    int? loginId;
    String? userType;
 
@@ -17,7 +19,7 @@ import 'package:flutter/material.dart';
       // Creating the request data
       var requestData = {
         'username': username,
-        'password': password,
+        'password':  password,
       };
 
       // Sending POST request
@@ -28,10 +30,12 @@ import 'package:flutter/material.dart';
       if (response.statusCode == 200&&response.data['message']=='success') {
         loginId=response.data['login_id'];
         userType=response.data['user_type'];
+   
         
         if (userType=='user') {
+         getUserProfile();
           Navigator.push(context, MaterialPageRoute(builder: (context)=>BridalEleganceHome()));
-        }else{
+        }else{  getProfile();  
           Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
         }
 

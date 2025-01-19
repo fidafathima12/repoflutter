@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
     try {
       // Sending GET request
       Response response = await _dio.get('$baseUrl/Viewnotificationapi');
+      print("notttt$response");
 
       // Checking if the request was successful
       if (response.statusCode == 200) {

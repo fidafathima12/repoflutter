@@ -13,9 +13,7 @@
 //   final TextEditingController _searchController = TextEditingController();
 //   String _searchQuery = "";
 //   String _selectedCategory = "All";
-  
 
-  
 //   // Example list of artists with categories
 //   final List<Map<String, dynamic>> _artists = [
 //     {
@@ -46,7 +44,7 @@
 //         "assets/bride2.jpg",
 //       ],
 //     },
-   
+
 //   ];
 
 //   @override
@@ -76,7 +74,7 @@
 //           padding: const EdgeInsets.all(16.0),
 //           child: Column(
 //             children: [
-              
+
 //               SizedBox(height: 16),
 
 //               // Search TextField
@@ -309,9 +307,6 @@
 //   }
 // }
 
-
-
-
 import 'package:bridal_hub/presentation/user/modelsviewpage.dart';
 import 'package:bridal_hub/services/loginApi.dart';
 import 'package:bridal_hub/services/user/searchartist.dart';
@@ -362,7 +357,10 @@ class _SearchArtistScreenState extends State<SearchArtistScreen> {
       appBar: AppBar(
         title: Text(
           "Bridal Hub",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Cursive'),
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              fontFamily: 'Cursive'),
         ),
         centerTitle: true,
         backgroundColor: Colors.blue[900],
@@ -384,12 +382,15 @@ class _SearchArtistScreenState extends State<SearchArtistScreen> {
                           artistName: artist["name"] ?? "no name",
                           experience: artist["experience"] ?? "no exp",
                           rating: artist["rating"] != null
-                              ? double.tryParse(artist["rating"].toString()) ?? 0.0
-                              : 0.0,
-                          contact: artist["contactno"]?.toString() ?? "no contact",
+                              ? double.tryParse(artist["rating"].toString()) ??
+                                  0.0
+                              : 2.0,
+                          contact:
+                              artist["contactno"]?.toString() ?? "no contact",
                           email: artist["email"] ?? "no email",
                           place: artist["address"] ?? "no address",
-                          previousWorks: List<String>.from(artist["images"] ?? []),
+                          previousWorks:
+                              List<String>.from(artist["images"] ?? []),
                         );
                       }).toList(),
                     ),
@@ -399,7 +400,9 @@ class _SearchArtistScreenState extends State<SearchArtistScreen> {
       ),
     );
   }
-}class ArtistCard extends StatelessWidget {
+}
+
+class ArtistCard extends StatelessWidget {
   final String artistid;
   final String artistName;
   final String experience;
@@ -523,13 +526,33 @@ class _SearchArtistScreenState extends State<SearchArtistScreen> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        '$baseUrl/${previousWorks[index]}',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Scaffold(appBar: AppBar(),
+                                body: Container(
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  child: Image.network(
+                                    '$baseUrl/${previousWorks[index]}',
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ));
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          '$baseUrl/${previousWorks[index]}',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   );
@@ -539,16 +562,62 @@ class _SearchArtistScreenState extends State<SearchArtistScreen> {
             SizedBox(height: 16),
 
             // Book Artist Button
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // Navigate to booking functionality
+            //     // Navigator.push(
+            //     //   context,
+            //     //   MaterialPageRoute(builder: (context) => BookArtistScreen(name: artistName, artistid: artistid,dressid: ,)),
+            //     // );
+            //   },
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: Colors.blue[900],
+            //     padding: EdgeInsets.symmetric(vertical: 12),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //   ),
+            //   child: Center(
+            //     child: Text(
+            //       "Book",
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.bold,
+            //         fontSize: 16,
+            //         color: Colors.white,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
+            // Add a new button for the "View Dress Model" Screen
+            SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {
-                // Navigate to booking functionality
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BookArtistScreen(name: artistName, artistid: artistid)),
-                );
+              onPressed: () async {
+                // Fetch the associated model images based on artistid
+                try {
+                  // You can make an API call with the artistid here
+                  List<
+                      Map<String,
+                          dynamic>> modelImages = await fetchModelImages(
+                      context,
+                      artistid); // Define this function to fetch model images
+                  // Pass the images to the next screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DressDetailsPage(
+                          modelImages: modelImages,
+                          artistname: artistName,
+                          artistid:
+                              artistid), // Pass images to DressDetailsPage
+                    ),
+                  );
+                } catch (e) {
+                  print("Error fetching model images: $e");
+                }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue[900],
+                backgroundColor: Colors.green[700],
                 padding: EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -556,7 +625,7 @@ class _SearchArtistScreenState extends State<SearchArtistScreen> {
               ),
               child: Center(
                 child: Text(
-                  "Book",
+                  "View Details",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -564,46 +633,7 @@ class _SearchArtistScreenState extends State<SearchArtistScreen> {
                   ),
                 ),
               ),
-            ),
-
-            // Add a new button for the "View Dress Model" Screen
-            SizedBox(height: 10),
-            ElevatedButton(
-  onPressed: () async {
-    // Fetch the associated model images based on artistid
-    try {
-      // You can make an API call with the artistid here
-      List<Map<String, dynamic>> modelImages = await fetchModelImages(context,artistid); // Define this function to fetch model images
-      // Pass the images to the next screen
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DressDetailsPage(modelImages: modelImages), // Pass images to DressDetailsPage
-        ),
-      );
-    } catch (e) {
-      print("Error fetching model images: $e");
-    }
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.green[700],
-    padding: EdgeInsets.symmetric(vertical: 12),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
-  ),
-  child: Center(
-    child: Text(
-      "View Dress Model",
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-        color: Colors.white,
-      ),
-    ),
-  ),
-)
-
+            )
           ],
         ),
       ),

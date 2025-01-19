@@ -12,6 +12,7 @@ class PaymentScreen extends StatefulWidget {
   final DateTime selectedDate;
   final String selectedTime;
   final String location;
+    final int dressid;
 
   // Constructor to accept the selected details
   PaymentScreen({
@@ -20,7 +21,7 @@ class PaymentScreen extends StatefulWidget {
     required this.artisname,
     required this.service,
     required this.selectedDate,
-    required this.selectedTime, required this.location,
+    required this.selectedTime, required this.location, required this.dressid,
   });
 
   @override
@@ -155,7 +156,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       "service": widget.service,
                       "booking_date": formattedDate,
                       "location":widget.location,
-                      "artistid":widget.artisid,
+                      // "artistid":widget.artisid,
+                      "dressid":widget.dressid,
                     }, context);
 
                     // Navigate to confirmation or bookings page

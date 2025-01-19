@@ -205,8 +205,9 @@ import 'package:flutter/material.dart';
 class BookArtistScreen extends StatefulWidget {
   final String name;
   final String artistid;
+  final int dressid;
 
-  const BookArtistScreen({super.key, required this.name, required this.artistid});
+  const BookArtistScreen({super.key, required this.name, required this.artistid, required this.dressid});
   @override
   _BookArtistScreenState createState() => _BookArtistScreenState();
 }
@@ -215,7 +216,7 @@ class _BookArtistScreenState extends State<BookArtistScreen> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
   TextEditingController _locationController = TextEditingController();
-  String? selectedService;  
+  List<String> selectedServices = []; // List to hold selected services
 
   Future<void> pickDate() async {
     final DateTime? date = await showDatePicker(
@@ -243,6 +244,17 @@ class _BookArtistScreenState extends State<BookArtistScreen> {
     }
   }
 
+  // Function to toggle service selection
+  void toggleService(String service) {
+    setState(() {
+      if (selectedServices.contains(service)) {
+        selectedServices.remove(service); // Unselect service
+      } else {
+        selectedServices.add(service); // Select service
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -260,45 +272,53 @@ class _BookArtistScreenState extends State<BookArtistScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20),
-            // Service Dropdown
+            // Service Selection with Checkboxes
             Text(
-              "Select Service",
+              "Select Services",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              items: [
-                DropdownMenuItem(
-                  value: "Makeup",
-                  child: Text("Makeup"),
-                ), DropdownMenuItem(
-                  value: "Mehandi",
-                  child: Text("Mehandi"),
-                ),
-                DropdownMenuItem(
-                  value: "Photography",
-                  child: Text("Photography"),
-                ),
-                DropdownMenuItem(
-                  value: "Hair Styling",
-                  child: Text("Hair Styling"),
-                ),
-                DropdownMenuItem(
-                  value: "Personal Assistant",
-                  child: Text("Personal Assistant"),
-                ),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  selectedService = value;
-                });
+            CheckboxListTile(
+              title: Text("Makeup"),
+              value: selectedServices.contains("Makeup"),
+              onChanged: (bool? value) {
+                if (value != null) toggleService("Makeup");
               },
-              hint: Text("Select Service"),
+            ),
+            CheckboxListTile(
+              title: Text("Mehandi"),
+              value: selectedServices.contains("Mehandi"),
+              onChanged: (bool? value) {
+                if (value != null) toggleService("Mehandi");
+              },
+            ),
+            CheckboxListTile(
+              title: Text("Photography"),
+              value: selectedServices.contains("Photography"),
+              onChanged: (bool? value) {
+                if (value != null) toggleService("Photography");
+              },
+            ),
+            CheckboxListTile(
+              title: Text("Hair Styling"),
+              value: selectedServices.contains("Hair Styling"),
+              onChanged: (bool? value) {
+                if (value != null) toggleService("Hair Styling");
+              },
+            ),
+             CheckboxListTile(
+              title: Text("Jewellery"),
+              value: selectedServices.contains("Jewellery"),
+              onChanged: (bool? value) {
+                if (value != null) toggleService("Jewellery");
+              },
+            ),
+            CheckboxListTile(
+              title: Text("Personal Assistant"),
+              value: selectedServices.contains("Personal Assistant"),
+              onChanged: (bool? value) {
+                if (value != null) toggleService("Personal Assistant");
+              },
             ),
             SizedBox(height: 20),
             // Date Picker
@@ -345,8 +365,8 @@ class _BookArtistScreenState extends State<BookArtistScreen> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Check if a service is selected
-                  if (selectedService != null && selectedDate != null) {
+                  // Check if at least one service is selected and a date is chosen
+                  if (selectedServices.isNotEmpty && selectedDate != null) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -355,18 +375,17 @@ class _BookArtistScreenState extends State<BookArtistScreen> {
                           userid: widget.artistid, 
                           selectedDate: selectedDate!, 
                           selectedTime: selectedTime?.format(context) ?? '', 
-                          service: selectedService!, 
+                          service: selectedServices.join(", "), // Show selected services
                           artisid: widget.artistid.toString(),
-                          location:_locationController.text,
+                          location: _locationController.text,
+                          dressid:widget.dressid,
                         ),
                       ),
-                      
                     );
                   } else {
-                    
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text("Please select a service and date."),
+                        content: Text("Please select at least one service and a date."),
                       ),
                     );
                   }

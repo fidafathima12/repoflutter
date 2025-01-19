@@ -7,14 +7,31 @@ class ViewReviewsScreen extends StatelessWidget {
   ViewReviewsScreen({required this.reviews});
 
   // Method to build rating stars
-  Widget _buildRatingStars(int rating) {
+  Widget _buildRatingStars(double rating) {
+    int fullStars = rating.floor();
+    bool hasHalfStar = (rating - fullStars) >= 0.5;
+
     return Row(
       children: List.generate(5, (index) {
-        return Icon(
-          Icons.star,
-          color: index < rating ? Colors.orange : Colors.grey,
-          size: 18,
-        );
+        if (index < fullStars) {
+          return Icon(
+            Icons.star,
+            color: Colors.orange,
+            size: 18,
+          );
+        } else if (index == fullStars && hasHalfStar) {
+          return Icon(
+            Icons.star_half,
+            color: Colors.orange,
+            size: 18,
+          );
+        } else {
+          return Icon(
+            Icons.star_border,
+            color: Colors.grey,
+            size: 18,
+          );
+        }
       }),
     );
   }
@@ -45,7 +62,8 @@ class ViewReviewsScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             final review = reviews[index];
             // Safely parse the rating (assuming it's a string)
-            int rating = int.tryParse(review["rating"].toString()) ?? 0;
+            double rating = double.tryParse(review["rating"].toString()) ?? 0.0;
+
             return Card(
               elevation: 5,
               shape: RoundedRectangleBorder(

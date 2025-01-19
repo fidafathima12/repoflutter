@@ -1,74 +1,62 @@
+import 'package:bridal_hub/services/artist/viewnotifications.dart';
 import 'package:flutter/material.dart';
+import 'package:bridal_hub/services/loginApi.dart'; // Import the API service
 
 class Not extends StatelessWidget {
   const Not({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue[900],
-          title: Text(
-            'Notification',
-            style: TextStyle(color: Colors.white),
-          ),
+      appBar: AppBar(
+        backgroundColor: Colors.blue[900],
+        title: Text(
+          'Notification',
+          style: TextStyle(color: Colors.white),
         ),
-        body: Column(
-          children: [
-            Center(
-              child: Card(
-                margin: EdgeInsets.symmetric(vertical: 9, horizontal: 20),
-                elevation: 4,
-                child: ListTile(
-                  title: Text(
-                    'Notification1',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: viewNotificationApi(),  // Call the API function to fetch notifications
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Display a loading spinner while waiting for data
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // Handle error if any
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // Handle empty data
+            return Center(child: Text('No notifications available.'));
+          } else {
+            // Display the notifications from the API response
+            var notifications = snapshot.data!;
+            return ListView.builder(
+              itemCount: notifications.length,
+              itemBuilder: (context, index) {
+                var notification = notifications[index];
+                return Card(
+                  margin: EdgeInsets.symmetric(vertical: 9, horizontal: 20),
+                  elevation: 4,
+                  child: ListTile(
+                    title: Text(
+                      notification['notification'] ?? 'No Title',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(notification['notification'] ?? 'No Notification'),
+                    trailing: Text(
+                      notification['date'] ?? 'No Date',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    onTap: () {
+                      // Handle notification tap if needed
+                    },
                   ),
-                  subtitle: Text('Notification1'),
-                  trailing: Text(
-                    '4/sep/2024',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  onTap: () {},
-                ),
-              ),
-            ),
-            Center(
-              child: Card(
-                margin: EdgeInsets.symmetric(vertical: 9, horizontal: 20),
-                elevation: 4,
-                child: ListTile(
-                  title: Text(
-                    'Notification2',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text('Notification2'),
-                  trailing: Text(
-                    '10/sep/2024',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  onTap: () {},
-                ),
-              ),
-            ),
-            Center(
-              child: Card(
-                margin: EdgeInsets.symmetric(vertical: 9, horizontal: 20),
-                elevation: 4,
-                child: ListTile(
-                  title: Text(
-                    'Notification3',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text('Notification3'),
-                  trailing: Text(
-                    '4/oct/2024',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  onTap: () {},
-                ),
-              ),
-            ),
-          ],
-        ));
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
   }
 }

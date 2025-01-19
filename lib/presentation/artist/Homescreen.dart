@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ARTIST', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('Hi  ${profiledata['name']}', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color.fromARGB(255, 18, 175, 196),
         elevation: 10,
         actions: [
@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
               const Color.fromARGB(255, 72, 159, 200),
               const Color.fromARGB(255, 25, 152, 211),
               Icons.work,
-              ()async {
+              () async {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => PreviousWork()),
@@ -71,11 +71,12 @@ class HomePage extends StatelessWidget {
               const Color.fromARGB(255, 94, 142, 231),
               const Color.fromARGB(255, 51, 129, 231),
               Icons.calendar_today,
-              () async{
-                // List<Map<String,dynamic>>bookingdata=await artistviewBookingsApi(); 
+              () async {
+                // List<Map<String,dynamic>>bookingdata=await artistviewBookingsApi();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AdminViewBookingsScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => AdminViewBookingsScreen()),
                 );
               },
             ),
@@ -84,11 +85,13 @@ class HomePage extends StatelessWidget {
               const Color.fromARGB(255, 62, 135, 212),
               const Color.fromARGB(195, 23, 127, 212),
               Icons.manage_accounts,
-              () async{
-                List<Map<String,dynamic>>paymentdata=await viewPaymnetApi(); 
+              () async {
+                List<Map<String, dynamic>> paymentdata = await viewPaymnetApi();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PaymentDetailsScreen(paymentstatus:paymentdata)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          PaymentDetailsScreen(paymentstatus: paymentdata)),
                 );
               },
             ),
@@ -111,12 +114,17 @@ class HomePage extends StatelessWidget {
                   CircleAvatar(
                     radius: 35,
                     backgroundColor: Colors.white,
-                    child: Icon(Icons.person, size: 40, color: Colors.deepPurple),
+                    child:
+                        Icon(Icons.person, size: 40, color: Colors.deepPurple),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Welcome User!',
-                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                    'Welcome, ${profiledata['name']}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -124,26 +132,31 @@ class HomePage extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.account_circle),
               title: Text('Manage Profile'),
-              onTap: ()async {
-                Map<String,dynamic>profiledata=await getProfile();
+              onTap: () async {
+                await getProfile();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EditProfilePage(profile: profiledata,)),
+                  MaterialPageRoute(
+                      builder: (context) => EditProfilePage(
+                            profile: profiledata,
+                          )),
                 );
               },
             ),
             ListTile(
               leading: Icon(Icons.rate_review),
               title: Text('View Review'),
-              onTap: ()async {
-                List<Map<String,dynamic>>reviewData=await viewreviewapi();
+              onTap: () async {
+                List<Map<String, dynamic>> reviewData = await viewreviewapi();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ViewReviewsScreen(reviews:reviewData)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ViewReviewsScreen(reviews: reviewData)),
                 );
               },
             ),
-        
+
             // ListTile(
             //   leading: Icon(Icons.help_outline),
             //   title: Text('Feedback'),
@@ -180,7 +193,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget buildButton(String label, Color startColor, Color endColor, IconData icon, Function() onPressed) {
+  Widget buildButton(String label, Color startColor, Color endColor,
+      IconData icon, Function() onPressed) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(

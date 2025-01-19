@@ -5,6 +5,9 @@ import 'package:bridal_hub/services/user/addfeedback.dart';
 import 'package:flutter/material.dart';
 
 class AddReviewScreen extends StatefulWidget {
+  final String id;
+
+  const AddReviewScreen({super.key, required this.id});
   @override
   _AddReviewScreenState createState() => _AddReviewScreenState();
 }
@@ -24,7 +27,7 @@ void _submitReview() {
 
  
   addReviewApi({
-    'userid': loginId,
+    'artist_id': widget.id,
     'review': _reviewController.text,
     'rating': _rating, 
   }, context).then((response) {

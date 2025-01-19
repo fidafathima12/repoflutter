@@ -1,18 +1,33 @@
 import 'package:bridal_hub/login/loginpage.dart';
+import 'package:bridal_hub/presentation/user/ThreeDmodelview.dart';
 import 'package:bridal_hub/presentation/user/add_complaints.dart';
 import 'package:bridal_hub/presentation/user/add_review.dart';
 import 'package:bridal_hub/presentation/user/book_artist.dart';
 import 'package:bridal_hub/presentation/user/notification.dart';
+import 'package:bridal_hub/presentation/user/profilescreen.dart';
 import 'package:bridal_hub/presentation/user/search_artist.dart';
 import 'package:bridal_hub/presentation/user/view_bookingstatus.dart';
+import 'package:bridal_hub/services/artist/manageprofike.dart';
 import 'package:bridal_hub/services/artist/viewnotifications.dart';
 import 'package:bridal_hub/services/artist/viewreview.dart';
+import 'package:bridal_hub/services/user/manageprofile.dart';
 import 'package:bridal_hub/services/user/searchartist.dart';
 import 'package:bridal_hub/services/user/viewbookingstatus.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class BridalEleganceHome extends StatelessWidget {
+class BridalEleganceHome extends StatefulWidget {
+  @override
+  State<BridalEleganceHome> createState() => _BridalEleganceHomeState();
+}
+
+class _BridalEleganceHomeState extends State<BridalEleganceHome> {
+  @override
+  void initState() {
+    getUserProfile();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,42 +57,157 @@ class BridalEleganceHome extends StatelessWidget {
               );
             },
           ),
+          // IconButton(
+          //   icon: Icon(
+          //     Icons.logout, // Change icon to logout for clarity
+          //     color: Colors.white,
+          //   ),
+          //   onPressed: () {
+          //     showDialog(
+          //       context: context,
+          //       builder: (BuildContext context) {
+          //         return AlertDialog(
+          //           title: Text("Logout"),
+          //           content: Text("Are you sure you want to log out?"),
+          //           actions: [
+          //             TextButton(
+          //               child: Text("Cancel"),
+          //               onPressed: () {
+          //                 Navigator.of(context).pop(); // Close the dialog
+          //               },
+          //             ),
+          //             TextButton(
+          //               child: Text("Logout"),
+          //               onPressed: () {
+          //                 // Navigator.of(context).pop(); // Close the dialog
+          //                 // Perform the logout action here
+          //                 Navigator.pushReplacement(
+          //                   context,
+          //                   MaterialPageRoute(
+          //                       builder: (context) => LoginPage()),
+          //                 ); // Example logout action
+          //               },
+          //             ),
+          //           ],
+          //         );
+          //       },
+          //     );
+          //   },
+          // ),
+          IconButton(
+            icon: Icon(
+              Icons.rotate_right,
+              color: Colors.white,
+            ), // Or use rotate_left
+            onPressed: () {
+              // Navigate to 3D model page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      DressUploadScreen(), // Replace with your 3D model page
+                ),
+              );
+            },
+          )
         ],
-        leading: IconButton(
-          icon: Icon(
-            Icons.logout, // Change icon to logout for clarity
-            color: Colors.white,
-          ),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Logout"),
-                  content: Text("Are you sure you want to log out?"),
-                  actions: [
-                    TextButton(
-                      child: Text("Cancel"),
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
-                      },
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue[900],
+              ),
+              child: Container(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(height: 10),
+                    Text(
+                      profiledata['name'] ??
+                          "", // Replace with actual user's name
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
-                    TextButton(
-                      child: Text("Logout"),
-                      onPressed: () {
-                        // Navigator.of(context).pop(); // Close the dialog
-                        // Perform the logout action here
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        ); // Example logout action
-                      },
+                    Text(
+                      profiledata["email"] ??
+                          "", // Replace with actual email or user info
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
+                ),
+              ),
+            ),
+            // Profile Button
+            ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text('Profile'),
+              onTap: () {
+                getUserProfile();
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UserProfileEditScreen(
+                          profile:
+                              profiledata)), // Create ProfileScreen as per your requirements
                 );
               },
-            );
-          },
+            ),
+            // Review Button
+            // ListTile(
+            //   leading: Icon(Icons.star),
+            //   title: Text('Review'),
+            //   onTap: () {
+            //     // Navigator.push(
+            //     //   context,
+            //     //   MaterialPageRoute(builder: (context) => AddReviewScreen()),
+            //     // );
+            //   },
+            // ),
+            // Logout Button
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Logout"),
+                      content: Text("Are you sure you want to log out?"),
+                      actions: [
+                        TextButton(
+                          child: Text("Cancel"),
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                        ),
+                        TextButton(
+                          child: Text("Logout"),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
+                            ); // Example logout action
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
       ),
       body: Padding(
@@ -100,8 +230,9 @@ class BridalEleganceHome extends StatelessWidget {
                     'Search for Artist',
                     Icons.search,
                     Colors.teal,
-                    ()async {
-                  List<Map<String, dynamic>>artistes=await getArtistesApi();
+                    () async {
+                      List<Map<String, dynamic>> artistes =
+                          await getArtistesApi();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -110,13 +241,14 @@ class BridalEleganceHome extends StatelessWidget {
                     },
                   ),
                   _buildFeatureButton(
-                    context,  
+                    context,
                     'Booking Status',
                     Icons.calendar_today,
                     Colors.purple,
-                    ()async {
-                      List<Map<String, dynamic>>booking=    await userViewbookingsApi();
-                     
+                    () async {
+                      List<Map<String, dynamic>> booking =
+                          await userViewbookingsApi();
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -126,15 +258,19 @@ class BridalEleganceHome extends StatelessWidget {
                   ),
                   _buildFeatureButton(
                     context,
-                    'Add Review',
+                    'Profille',
                     Icons.star,
                     Colors.amber,
-                    ()async {
+                    () async {
                       // List<Map<String, dynamic>>reviews=await viewReviewApi();
+                      getUserProfile();
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AddReviewScreen()),
+                            builder: (context) => UserProfileEditScreen(
+                                profile:
+                                    profiledata)), // Create ProfileScreen as per your requirements
                       );
                     },
                   ),

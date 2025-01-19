@@ -69,7 +69,7 @@
 //             ),
 //             const SizedBox(height: 30),
 //             // Decorative Icon and Thank You Message
-      
+
 //             const SizedBox(height: 30),
 //             // Navigation Button
 //             Center(
@@ -128,7 +128,8 @@
 // }
 import 'package:bridal_hub/services/loginApi.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';  // You can use Dio to make HTTP requests.
+import 'package:dio/dio.dart';
+import 'package:intl/intl.dart'; // You can use Dio to make HTTP requests.
 
 class PaymentDetailsScreen extends StatefulWidget {
   final List<Map<String, dynamic>> paymentstatus;
@@ -157,8 +158,10 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
     try {
       final Dio _dio = Dio();
       // Replace with your actual API endpoint
-      Response response = await _dio.get('$baseUrl/ArtistPaymentStatus/$loginId');
-      print("API Response: ${response.data}");  // Log the full API response for inspection
+      Response response =
+          await _dio.get('$baseUrl/ArtistPaymentStatus/$loginId');
+      print(
+          "API Response: ${response.data}"); // Log the full API response for inspection
 
       if (response.statusCode == 200) {
         // Parse the response and update the payments list
@@ -203,8 +206,7 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
             const SizedBox(height: 20),
 
             // Display loading indicator if data is still being fetched
-            if (isLoading)
-              const Center(child: CircularProgressIndicator()),
+            if (isLoading) const Center(child: CircularProgressIndicator()),
 
             // Show payments list if data is fetched
             if (!isLoading && payments.isNotEmpty)
@@ -217,11 +219,22 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
                   // Safely access fields in the response
                   String userName = payment['user_name'] ?? 'N/A';
                   String service = payment['service'] ?? 'N/A';
-                   String status = payment['status'] ?? 'N/A';
-                  String date = payment['date'] ?? 'N/A';
-                  String bookingDate = payment['booking_date'] ?? 'N/A';
+                  String status = payment['status'] ?? 'N/A';
+                  String date = payment['date'] != null
+                      ? DateTime.parse(payment['date'])
+                          .toLocal()
+                          .toString()
+                          .substring(0, 10)
+                      : 'N/A';
+
+                  String bookingDate = payment['booking_date'] != null
+                      ? DateFormat("yyyy-MM-dd")
+                          .format(DateTime.parse(payment['booking_date']))
+                      : 'N/A';
+
                   String paymentMethod = payment['paymentmethod'] ?? 'N/A';
-                  double amount = payment['amount'] != null ? payment['amount'] : 0.0;
+                  double amount =
+                      payment['amount'] != null ? payment['amount'] : 0.0;
 
                   return Card(
                     elevation: 5,
@@ -269,7 +282,8 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue[900],
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),

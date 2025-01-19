@@ -11,7 +11,7 @@ Future<Map<String, dynamic>> addReviewApi(Map<String, dynamic> data, BuildContex
   try {
     // Send POST request to the API endpoint
     Response response = await _dio.post(
-      '$baseUrl/addreviewapi', // Replace with your actual API endpoint
+      '$baseUrl/addreviewapi/$loginId', // Replace with your actual API endpoint
       data: data,
     );
 
